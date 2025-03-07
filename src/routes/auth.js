@@ -36,7 +36,7 @@ authRouter.post("/login", async (req, res) => {
       const token = await jwt.sign({ _id: user._id }, "prasad@DevTinder");
 
       res.cookie("token", token);
-      res.send("User Loggin successfully");
+      res.send(user);
     } else {
       throw new Error("password is not correct");
     }
@@ -46,12 +46,12 @@ authRouter.post("/login", async (req, res) => {
 });
 
 authRouter.post("/logout", userAuth, (req, res) => {
-  //   const { token } = req.cookies;
-  //   console.log(token);
-  //   if (!token) {
-  //     throw new Error("no token");
-  //   }
-  //   res.clearCookie(token);
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.send("not logged in");
+  }
+
   res.cookie("token", null, {
     expires: new Date(Date.now()),
   });
